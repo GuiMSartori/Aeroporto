@@ -1,0 +1,2 @@
+As threads sao criadas e a funçao thread é especificada no arquivo main.c
+como exemplificado no exercicio resolvido do mutex.

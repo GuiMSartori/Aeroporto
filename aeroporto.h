@@ -2,6 +2,7 @@
 #define AEROPORTO_H
 
 #include "aviao.h"
+#include "semaphore.h"
 
 typedef size_t tempo_t;
 
@@ -16,6 +17,10 @@ typedef struct {
 	tempo_t t_bagagens_esteira;
 	// Adicionar aqui outros atributos que você achar necessários.
 	// Exemplo: esteiras, portões, etc...
+	sem_t sem_pistas;
+	sem_t sem_portoes;
+	sem_t sem_esteiras;
+	sem_t sem_max_avioes_esteira;
 } aeroporto_t;
 
 
