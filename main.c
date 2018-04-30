@@ -5,6 +5,8 @@
 #include <time.h>
 
 #include "aeroporto.h"
+#include "aviao.h"
+#include "fila.h"
 
 #define NOVO_AVIAO_MIN 30
 #define NOVO_AVIAO_MAX 120
@@ -96,8 +98,26 @@ int main (int argc, char** argv) {
 
 	// Descreve aqui sua simulação usando as funções definidas no arquivo "aeroporto.h"
 	// Lembre-se de implementá-las num novo arquivo "aeroporto.c"
-
-
+	fila_ordenada_t * fila_avioes = criar_fila();
+	int tempo_atual = 0;
+	int ini_id = 0;
+	int ini_combustivel = 0;
+	int t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
+	while(tempo_atual < t_simulacao) {
+		if(tempo_atual % t_novo_aviao == 0) {
+			ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
+			aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
+			if(aviao->combustivel == p_combustivel_min) {
+				inserir(&fila_avioes, &aviao); //insere de forma ordenada
+				//cria thread do aviao
+			} else {
+				//aloca_elemento(&lista_avioes, aviao); alterar funcao em .c e .h
+			}
+			t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
+		}
+		tempo_atual++;
+	}
+	desaloca_fila(fila_avioes);
 	finalizar_aeroporto(meu_aeroporto);
 	return 1;
 }
