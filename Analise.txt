@@ -1,2 +1,5 @@
 As threads sao criadas e a funçao thread é especificada no arquivo main.c
 como exemplificado no exercicio resolvido do mutex.
+
+codigo para numero aleatorio em intervalo
+rand() % (max_number + 1 - min_number) + min_number;

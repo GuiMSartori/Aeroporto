@@ -13,26 +13,26 @@ em que os aviões reservam e liberam recursos do aeroporto, de forma que seja po
 verificar o funcionamento correto da simulação.
 
 A seguir são apresentadas as principais características de cada um dos elementos
-pertencentesao simulador. Todas as medidas de tempo citadas a seguir deverão ser
+pertencentes ao simulador. Todas as medidas de tempo citadas a seguir deverão ser
 representadas em milissegundos.
 
 -->Aviões
 Aviões são consumidores de recursos do aeroporto e deverão ser representados por
 threads na sua solução. Basicamente, eles devem realizar a seguinte rotina:
 
-    Aproximação ao aeroporto. Primeiramente o avião deverá realizar uma etapa
+    1.Aproximação ao aeroporto. Primeiramente o avião deverá realizar uma etapa
     de aproximação, onde aguardará até que uma das pistas de pouso esteja desocupada.
-    Pouso. Quando uma pista estiver desocupada, o avião deverá então pousar.
-    Acoplagem a um portão. Após o pouso, o avião deverá se dirigir a um portão de
+    2.Pouso. Quando uma pista estiver desocupada, o avião deverá então pousar.
+    3.Acoplagem a um portão. Após o pouso, o avião deverá se dirigir a um portão de
     embarque/desembarque.
-    Transporte de bagagens. Ao chegar no portão, as bagagens serão removidas do 
+    4.Transporte de bagagens. Ao chegar no portão, as bagagens serão removidas do 
     avião e colocadas em uma das esteiras de malas disponíveis no aeroporto. 
     Então, novos passageiros embarcarão no avião e suas bagagens serão transferidas
     para o avião. O avião deverá liberar o portão de desembarque/embarque quando as
     malas dos passageiros que estão embarcando tiverem sido colocadas no avião.
     Para simplificar o problema, considere que todos os passageiros já terão embarcado
     quando todas as suas malas tiverem sido colocadas no avião.
-    Decolagem. Após o transporte de bagagens o avião deverá novamente escolher uma pista
+    5.Decolagem. Após o transporte de bagagens o avião deverá novamente escolher uma pista
     para, então, decolar. Você deverá garantir que aviões possam eventualmente decolar,
     mesmo na presença de aviões em aproximação para pouso.
 
