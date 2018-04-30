@@ -19,8 +19,7 @@ typedef struct {
 	// Exemplo: esteiras, portões, etc...
 	sem_t sem_pistas;
 	sem_t sem_portoes;
-	sem_t sem_esteiras;
-	sem_t sem_max_avioes_esteira;
+	sem_t * sem_esteiras;
 } aeroporto_t;
 
 

@@ -27,10 +27,11 @@ typedef struct {
   elemento_t * primeiro;
   elemento_t * ultimo;
   size_t n_elementos;
+  size_t combustivel_max;
 } fila_ordenada_t;
 
 // Alocacão dinâmica da fila ordenada de aviões
-fila_ordenada_t * criar_fila ();
+fila_ordenada_t * criar_fila (size_t combustivel_max);
 
 // Desaloca a fila.
 // Não se esqueca de desalocar todos os elementos antes de finalizar.
