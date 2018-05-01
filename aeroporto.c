@@ -28,26 +28,32 @@ aeroporto_t* iniciar_aeroporto (size_t* args, size_t n_args) {
 }
 
 void aproximacao_aeroporto (aeroporto_t* aeroporto, int* id) {
-	printf("Aviao id:%ls se aproxima do aeroporto\n", id);
+	printf("Aviao id:%d se aproxima do aeroporto\n", *((int *)id));
+	fflush(stdout);
 }
 
 void pousar_aviao (aeroporto_t* aeroporto, aviao_t* aviao) {
 	sem_wait(&aeroporto->sem_pistas);
 	printf("Aviao id:%zu esta pousando\n", aviao->id);
+	fflush(stdout);
 	usleep(aeroporto->t_pouso_decolagem);
 	printf("Aviao id:%zu pousou\n", aviao->id);
+	fflush(stdout);
 	sem_post(&aeroporto->sem_pistas);
 }
 
 void acoplar_portao (aeroporto_t* aeroporto, aviao_t* aviao) {
 	sem_wait(&aeroporto->sem_portoes);
 	printf("Aviao id:%zu se acoplou\n", aviao->id);
+	fflush(stdout);
 }
 
 void transportar_bagagens (aeroporto_t* aeroporto, aviao_t* aviao) {
 	printf("Aviao id:%zu esta trasnportando as bagagens\n", aviao->id);
+	fflush(stdout);
 	usleep(aeroporto->t_inserir_bagagens);
 	printf("Aviao id:%zu terminou de transportar as bagagens\n", aviao->id);
+	fflush(stdout);
 	sem_post(&aeroporto->sem_portoes);
 }
 
@@ -64,14 +70,17 @@ void adicionar_bagagens_esteira (aeroporto_t* aeroporto, aviao_t* aviao) {
 		}
 	}
 	printf("Aviao id:%zu esta transferindo as bagagens a esteira\n", aviao->id);
+	fflush(stdout);
 	usleep(aeroporto->t_remover_bagagens);
 	printf("Aviao id:%zu terminou de transferir as bagagens a esteira\n", aviao->id);
+	fflush(stdout);
 	sem_post(&aeroporto->sem_esteiras[esteira_ocupada]);
 }
 
 void decolar_aviao (aeroporto_t* aeroporto, aviao_t* aviao) {
 	sem_wait(&aeroporto->sem_pistas);
 	printf("Aviao id:%zu decolou\n", aviao->id);
+	fflush(stdout);
 	sem_post(&aeroporto->sem_pistas);
 
 }

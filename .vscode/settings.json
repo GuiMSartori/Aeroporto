@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "aviao.h": "c",
-        "pthread.h": "c",
-        "fila.h": "c"
-    }
-}

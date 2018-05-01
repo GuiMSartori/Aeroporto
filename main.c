@@ -1,9 +1,9 @@
-#include <pthread.h>
-#include "semaphore.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #include <unistd.h>
+#include <time.h>
+#include <pthread.h>
+#include "semaphore.h"
 
 #include "aeroporto.h"
 #include "aeroporto.c"
@@ -28,47 +28,82 @@ size_t p_combustivel_min, p_combustivel_max;
 fila_ordenada_t * fila_avioes;
 aeroporto_t* meu_aeroporto;
 
+
 //Thread que controla o tempo de execucao do programa
 void * cronometro(void *arg) {
-	usleep(*((int *) arg));
+	printf("terminou parte 3\n");
+	fflush(stdout);
+	int i =*((int *) arg);
+	usleep(i);
+	printf("terminou parte 3.2\n");
+	fflush(stdout);
 	rodar_programa = 0;
 	pthread_exit(NULL);
 }
 
 //Thread que controla a rotina do aviao
 void * rotina_aviao(void *arg) {
+	printf("terminou parte aviao começo\n");
+	fflush(stdout);
 	//int id_aviao = *((int *) arg);
 	int id_aviao = *((int *) arg);
+	printf("terminou parte id:%d\n", id_aviao);
+	fflush(stdout);
 	//1.Aproximação ao aeroporto
+	printf("terminou parte aproximacao\n");
+	fflush(stdout);
 	aproximacao_aeroporto(meu_aeroporto, &id_aviao);
 	//2.Pouso.
-	while(id_aviao != fila_avioes->primeiro->dado->id);
+	printf("terminou parte pouso\n");
+	fflush(stdout);
+	if(fila_avioes->n_elementos != 0) {
+		while(id_aviao != fila_avioes->primeiro->dado->id);
+	}
 	aviao_t * aviao = remover(fila_avioes);
 	pousar_aviao(meu_aeroporto, aviao);
+	fflush(stdout);
 	//3.Acoplagem a um portão.
+	printf("terminou parte acoplagem\n");
+	fflush(stdout);
 	acoplar_portao(meu_aeroporto, aviao);
 	//4.1Desembarque/Retirada das bagagens
+	printf("terminou parte desembarque\n");
+	fflush(stdout);
 	adicionar_bagagens_esteira(meu_aeroporto, aviao);
 	//4.2Embarque/Transporte de bagagens.
+	printf("terminou parte embarque\n");
+	fflush(stdout);
 	transportar_bagagens(meu_aeroporto, aviao);
 	//5.Decolagem.
+	printf("terminou parte decolagem\n");
+	fflush(stdout);
 	decolar_aviao(meu_aeroporto, aviao);
 	desaloca_aviao(aviao);
+	printf("terminou parte aviao fim\n");
+	fflush(stdout);
 	pthread_exit(NULL);
 }
 
 //Thread que cria os avioes
 void * fabrica_aviao(void *arg) {
+	printf("terminou parte 4\n");
 	int ini_id = 0;
+	srand(time(NULL));
 	while(rodar_programa == 1) {
+		printf("terminou parte 5\n");
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
-		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
+		aviao_t * aviao = aloca_aviao(10, ini_id);
+		printf("terminou parte 5.2\n");
+		printf("terminou parte 5.2 combustivel:%d \n", ini_combustivel);
 		inserir(fila_avioes, aviao);
 		ini_id++;
+		printf("terminou parte 5.3\n");
 		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
+		printf("terminou parte 5.4\n");
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	}
+	printf("terminou parte 6\n");
 	pthread_exit(NULL);
 }
 
@@ -140,14 +175,12 @@ int main (int argc, char** argv) {
 	printf("Tempo de inserção (%zu) e remoção (%zu) de bagagens\n", t_inserir_bagagens, t_remover_bagagens);
 	printf("Número de esteiras: %zu, com %zu aviões por esteira\n", n_esteiras, n_max_avioes_esteira);
 	printf("Tempo das bagagens nas esteiras: %zu\n", t_bagagens_esteira);
-
 	// Inicialização do aeroporto
 	n_args = 8;
 	size_t args[8] = {n_pistas, n_portoes, n_esteiras,
 				n_max_avioes_esteira,
 				t_pouso_decolagem, t_remover_bagagens,
 				t_inserir_bagagens, t_bagagens_esteira};
-
 	meu_aeroporto = iniciar_aeroporto(args, n_args);
 
 	// Descreve aqui sua simulação usando as funções definidas no arquivo "aeroporto.h"
@@ -158,7 +191,8 @@ int main (int argc, char** argv) {
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
 	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
 	while(rodar_programa == 1);
-
+	printf("terminou parte 8\n");
+	fflush(stdout);
 	desaloca_fila(fila_avioes);
 	finalizar_aeroporto(meu_aeroporto);
 	return 1;

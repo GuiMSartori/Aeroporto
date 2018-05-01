@@ -12,3 +12,6 @@ fazendo a sua rotina enquanto outra thread cuida do tempo de liberaçao das este
 
 Outra soluçao seria fazer com que o aviao em si espere o tempo para liberar a esteira
 para poder continuar sua execuçao.
+
+gcc -g main.c -o teste -pthread -lpthread
+gcc -o teste main.c -lpthread
