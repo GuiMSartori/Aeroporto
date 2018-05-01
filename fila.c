@@ -51,21 +51,22 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado) {
     }
     fila->ultimo = novo;
   } else {
-    fila->primeiro->proximo = novo;
-    novo->anterior = fila->primeiro;
+    if (fila->n_elementos > 0) {
+      fila->primeiro->proximo = novo;
+      novo->anterior = fila->primeiro;
+    } else {
+      fila->ultimo = novo;
+    }
     fila->primeiro = novo;
   }
-fila->n_elementos++;
+  fila->n_elementos++;
 }
 
 aviao_t * remover (fila_ordenada_t * fila) {
   printf("  terminou tamanho lista:%ld\n", fila->n_elementos);
   fflush(stdout);
-  if(fila->n_elementos ==1) {
-    aviao_t * retorno = fila->primeiro->dado;
-    fila->primeiro = NULL;
-    fila->ultimo = NULL;
-    return retorno;
+  if (fila->n_elementos == 0){
+    return NULL;
   }
   aviao_t * retorno = fila->primeiro->dado;
   fila->primeiro = fila->primeiro->anterior;
