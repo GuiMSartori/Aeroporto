@@ -61,8 +61,6 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado) {
 }
 
 aviao_t * remover (fila_ordenada_t * fila) {
-  printf("  terminou tamanho lista:%ld\n", fila->n_elementos);
-  fflush(stdout);
   if (fila->n_elementos == 0){
     return NULL;
   }
