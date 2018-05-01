@@ -56,10 +56,12 @@ void * rotina_aviao(void *arg) {
 	//2.Pouso.
 	printf("terminou parte pouso\n");
 	fflush(stdout);
-	if(fila_avioes->n_elementos != 0) {
+	/*if(fila_avioes->n_elementos != 0) {
 		while(id_aviao != fila_avioes->primeiro->dado->id);
-	}
+	}*/
+	printf("terminou parte antes de remover da lista\n");
 	aviao_t * aviao = remover(fila_avioes);
+	printf("terminou parte depois de remover da lista\n");
 	pousar_aviao(meu_aeroporto, aviao);
 	fflush(stdout);
 	//3.Acoplagem a um portão.

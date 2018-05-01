@@ -24,7 +24,9 @@
  }
 
 void desaloca_elemento (elemento_t * elemento) {
+  printf("terminou parte começou a funçao 1.3.1\n");
     desaloca_aviao(elemento->dado);
+    printf("terminou parte começou a funçao 1.3.2\n");
     free(elemento);
 }
 
@@ -79,12 +81,25 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado) {
     printf("terminou parte 5.2.7\n");
     fflush(stdout);
   }
-
+fila->n_elementos++;
 }
 
 aviao_t * remover (fila_ordenada_t * fila) {
+  printf("terminou tamanho lista:%ld\n", fila->n_elementos);
+  if(fila->n_elementos ==1) {
+    printf("terminou teste1\n");
+    aviao_t * retorno = fila->primeiro->dado;
+    fila->primeiro = NULL;
+    fila->ultimo = NULL;
+    printf("terminou teste2\n");
+    return retorno;
+  }
+  printf("terminou parte começou a funçao 1.1\n");
   aviao_t * retorno = fila->primeiro->dado;
+  printf("terminou parte começou a funçao 1.2\n");
   fila->primeiro = fila->primeiro->anterior;
+  printf("terminou parte começou a funçao 1.3\n");
   desaloca_elemento(fila->primeiro->proximo);
+  printf("terminou parte começou a funçao 1.4\n");
   return retorno;
 }
