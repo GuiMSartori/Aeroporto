@@ -16,3 +16,4 @@ para poder continuar sua execuçao.
 gcc -g main.c -o teste -pthread -lpthread
 gcc -o teste main.c -lpthread
 segmentation fault esta no arquivo fila.c, na linha 102.
+terminou parte começou a funçao 1.3.2
