@@ -23,7 +23,7 @@
 #define TEMPO_SIMULACAO 10000
 
 int rodar_programa = 1;
-size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao;
+size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao, t_simulacao;
 size_t p_combustivel_min, p_combustivel_max;
 fila_ordenada_t * fila_avioes;
 aeroporto_t* meu_aeroporto;
@@ -31,8 +31,7 @@ aeroporto_t* meu_aeroporto;
 
 //Thread que controla o tempo de execucao do programa
 void * cronometro(void *arg) {
-	int i =*((int *) arg);
-	usleep(i);
+	usleep(t_simulacao);
 	rodar_programa = 0;
 	pthread_exit(NULL);
 }
@@ -41,21 +40,24 @@ void * cronometro(void *arg) {
 void * rotina_aviao(void *arg) {
 	int id_aviao = *((int *) arg);
 	if(rodar_programa == 1) {
-	while(rodar_programa == 1) {
 		//int id_aviao = *((int *) arg);
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
+
 		//2.Pouso.
 		while(id_aviao != fila_avioes->primeiro->dado->id);
-
 		aviao_t * aviao = remover(fila_avioes);
 		pousar_aviao(meu_aeroporto, aviao);
+
 		//3.Acoplagem a um portão.
 		acoplar_portao(meu_aeroporto, aviao);
+
 		//4.1Desembarque/Retirada das bagagens
 		adicionar_bagagens_esteira(meu_aeroporto, aviao);
+
 		//4.2Embarque/Transporte de bagagens.
 		transportar_bagagens(meu_aeroporto, aviao);
+
 		//5.Decolagem.
 		decolar_aviao(meu_aeroporto, aviao);
 		desaloca_aviao(aviao);
@@ -86,7 +88,7 @@ int main (int argc, char** argv) {
 	//size_t t_novo_aviao_min, t_novo_aviao_max;
 	size_t t_pouso_decolagem;
 	size_t t_remover_bagagens, t_inserir_bagagens;
-	size_t t_bagagens_esteira, t_simulacao;
+	size_t t_bagagens_esteira;
 
 	// Variáveis discretas (inicio n_)
 	size_t n_pistas, n_portoes;
