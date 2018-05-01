@@ -16,8 +16,7 @@
  }
 
 void desaloca_elemento (elemento_t * elemento) {
-    desaloca_aviao(elemento->dado);
-    free(elemento);
+  free(elemento);
 }
 
 fila_ordenada_t * criar_fila (size_t combustivel_max) {
@@ -65,12 +64,12 @@ aviao_t * remover (fila_ordenada_t * fila) {
   }
   aviao_t * retorno = fila->primeiro->dado;
   if (fila->n_elementos == 1) {
-    free(fila->primeiro);
+    desaloca_elemento(fila->primeiro);
     fila->n_elementos--;
     return retorno;
   }
   fila->primeiro = fila->primeiro->anterior;
-  free(fila->primeiro->proximo);
+  desaloca_elemento(fila->primeiro->proximo);
   fila->n_elementos--;
   return retorno;
 }
