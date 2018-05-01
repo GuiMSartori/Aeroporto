@@ -39,26 +39,29 @@ void * cronometro(void *arg) {
 
 //Thread que controla a rotina do aviao
 void * rotina_aviao(void *arg) {
+<<<<<<< HEAD
+	int id_aviao = *((int *) arg);
+	if(rodar_programa == 1) {
+=======
 	while(rodar_programa == 1) {
+>>>>>>> master
 		//int id_aviao = *((int *) arg);
-		int id_aviao = *((int *) arg);
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
 		//2.Pouso.
-		if(fila_avioes->n_elementos != 0) {
-			while(id_aviao != fila_avioes->primeiro->dado->id);
-			aviao_t * aviao = remover(fila_avioes);
-			pousar_aviao(meu_aeroporto, aviao);
-			//3.Acoplagem a um portão.
-			acoplar_portao(meu_aeroporto, aviao);
-			//4.1Desembarque/Retirada das bagagens
-			adicionar_bagagens_esteira(meu_aeroporto, aviao);
-			//4.2Embarque/Transporte de bagagens.
-			transportar_bagagens(meu_aeroporto, aviao);
-			//5.Decolagem.
-			decolar_aviao(meu_aeroporto, aviao);
-			desaloca_aviao(aviao);
-		}
+		while(id_aviao != fila_avioes->primeiro->dado->id);
+
+		aviao_t * aviao = remover(fila_avioes);
+		pousar_aviao(meu_aeroporto, aviao);
+		//3.Acoplagem a um portão.
+		acoplar_portao(meu_aeroporto, aviao);
+		//4.1Desembarque/Retirada das bagagens
+		adicionar_bagagens_esteira(meu_aeroporto, aviao);
+		//4.2Embarque/Transporte de bagagens.
+		transportar_bagagens(meu_aeroporto, aviao);
+		//5.Decolagem.
+		decolar_aviao(meu_aeroporto, aviao);
+		desaloca_aviao(aviao);
 	}
 	pthread_exit(NULL);
 }
