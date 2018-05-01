@@ -171,9 +171,7 @@ int main (int argc, char** argv) {
 	pthread_t tempo, fabrica;
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
 	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
-	//aviao_t * aviao = aloca_aviao(10, 2); Remover tese rotina aviao
-	//pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);Remover tese rotina aviao
-	while(rodar_programa == 1);
+	while(rodar_programa == 1){}
 	printf("Tempo acabou\n");
 	fflush(stdout);
 	desaloca_fila(fila_avioes);
