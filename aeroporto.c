@@ -1,4 +1,6 @@
 #include "aeroporto.h"
+#include "aviao.h"
+#include "aviao.c"
 #include "semaphore.h"
 
 /**

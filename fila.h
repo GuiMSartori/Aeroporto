@@ -2,6 +2,7 @@
 #define FILA_AVIAO_H
 
 #include "aviao.h"
+#include "aviao.c"
 
 /**
  * Esta estrutura auxiliar deve facilitar a implementação da fila ordenada.
@@ -43,5 +44,8 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado);
 
 // Remove o último da fila.
 aviao_t * remover (fila_ordenada_t * fila);
+
+//Retorna id do primeiro aviao da fila.
+int id_primeiro (fila_ordenada_t * fila);
 
 #endif

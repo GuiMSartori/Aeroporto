@@ -5,8 +5,11 @@
 #include <time.h>
 
 #include "aeroporto.h"
+#include "aeroporto.c"
 #include "aviao.h"
+#include "aviao.c"
 #include "fila.h"
+#include "fila.c"
 
 #define NOVO_AVIAO_MIN 30
 #define NOVO_AVIAO_MAX 120
@@ -18,12 +21,40 @@
 #define TEMPO_BAGAGENS_ESTEIRA 200
 #define TEMPO_SIMULACAO 10000
 
-int tempo_atual = 0;//Remover
+int rodar_programa = 1;
+size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao;
+size_t p_combustivel_min, p_combustivel_max;
+fila_ordenada_t * fila_avioes;
+
+void * cronometro(void *arg) {
+	usleep(*((int *) arg));
+	rodar_programa = 0;
+	pthread_exit(NULL);
+}
+
+void * rotina_aviao(void *arg) {
+
+}
+
+void * fabrica_aviao(void *arg) {
+	int ini_id = 0;
+	while(rodar_programa == 1) {
+		usleep(t_novo_aviao);
+		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
+		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
+		inserir(&fila_avioes, aviao);
+		ini_id++;
+		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
+	}
+
+
+	pthread_exit(NULL);
+}
 
 int main (int argc, char** argv) {
 
 	// Variáveis temporais (inicio t_)
-	size_t t_novo_aviao_min, t_novo_aviao_max;
+	//size_t t_novo_aviao_min, t_novo_aviao_max;
 	size_t t_pouso_decolagem;
 	size_t t_remover_bagagens, t_inserir_bagagens;
 	size_t t_bagagens_esteira, t_simulacao;
@@ -34,7 +65,7 @@ int main (int argc, char** argv) {
 	size_t n_args;
 
 	// Variáveis de prioridade (inicio p_)
-	size_t p_combustivel_min, p_combustivel_max;
+	//size_t p_combustivel_min, p_combustivel_max;
 
 	if (argc == 5) { // Argumentos sem tempos de execução
 		t_novo_aviao_min = NOVO_AVIAO_MIN;
@@ -100,20 +131,13 @@ int main (int argc, char** argv) {
 
 	// Descreve aqui sua simulação usando as funções definidas no arquivo "aeroporto.h"
 	// Lembre-se de implementá-las num novo arquivo "aeroporto.c"
-	fila_ordenada_t * fila_avioes = criar_fila(p_combustivel_max);
-	int ini_id = 0;
-	int ini_combustivel = 0;
-	int t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
-	while(tempo_atual < t_simulacao) {
-		if(tempo_atual % t_novo_aviao == 0) {
-			ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
-			aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
-			inserir(&fila_avioes, aviao);
-			//cria thread do aviao
-			t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
-		}
-		tempo_atual++;
-	}
+	fila_avioes = criar_fila(p_combustivel_max);
+	t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
+	pthread_t tempo, fabrica;
+	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
+	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
+	while(rodar_programa == 1);
+	
 	desaloca_fila(fila_avioes);
 	finalizar_aeroporto(meu_aeroporto);
 	return 1;

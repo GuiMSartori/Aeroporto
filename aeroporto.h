@@ -2,6 +2,7 @@
 #define AEROPORTO_H
 
 #include "aviao.h"
+#include "aviao.c"
 #include "semaphore.h"
 
 typedef size_t tempo_t;

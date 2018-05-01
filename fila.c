@@ -1,4 +1,6 @@
 #include "fila.h"
+#include "aviao.h"
+#include "aviao.c"
 
 /**
  * fila.c
@@ -8,8 +10,8 @@
 
  elemento_t * aloca_elemento (aviao_t * dado) {
     elemento_t * elemento = (elemento_t *) malloc(sizeof(elemento_t));
-    elemento->proximo = nullptr;
-    elemento->anterior = nullptr;
+    elemento->proximo = NULL;
+    elemento->anterior = NULL;
     elemento->dado = dado;
     return elemento;
  }
@@ -31,7 +33,7 @@ fila_ordenada_t * criar_fila (size_t combustivel_max) {
 void desaloca_fila (fila_ordenada_t * fila) {
   elemento_t *ref, *next;
   ref = fila->primeiro;
-  for(int i = 0; i < n_elementos; i++) {
+  for(int i = 0; i < fila->n_elementos; i++) {
     next = ref->proximo;
     desaloca_elemento(ref);
     ref = next;
@@ -62,4 +64,8 @@ aviao_t * remover (fila_ordenada_t * fila) {
   fila->primeiro = fila->primeiro->anterior;
   desaloca_elemento(fila->primeiro->proximo);
   return retorno;
+}
+
+int id_primeiro (fila_ordenada_t * fila) {
+  return fila->primeiro->dado->id;
 }
