@@ -32,12 +32,14 @@ fila_ordenada_t * criar_fila (size_t combustivel_max) {
 void desaloca_fila (fila_ordenada_t * fila) {
   elemento_t *ref, *next;
   ref = fila->primeiro;
-  for(int i = 0; i < fila->n_elementos; i++) {
+  for(int i = 0; i < fila->n_elementos - 1; i++) {
+    printf("Começando remoçao de %d\n", i);
     next = ref->proximo;
-    pthread_join(ref->dado->thread, NULL);
-    desaloca_elemento(ref);
+    free(ref);
     ref = next;
+    printf("Removeu elemento %d\n", i);
   }
+  printf("Terminou\n");
   free(fila);
 }
 
@@ -66,13 +68,13 @@ aviao_t * remover (fila_ordenada_t * fila) {
     return NULL;
   }
   aviao_t * retorno = fila->primeiro->dado;
-  if(fila->n_elementos == 1) {
-    desaloca_elemento(fila->primeiro);
+  if (fila->n_elementos == 1) {
+    free(fila->primeiro);
     fila->n_elementos--;
     return retorno;
   }
   fila->primeiro = fila->primeiro->anterior;
-  desaloca_elemento(fila->primeiro->proximo);
+  free(fila->primeiro->proximo);
   fila->n_elementos--;
   return retorno;
 }

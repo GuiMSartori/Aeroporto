@@ -25,8 +25,7 @@
 int rodar_programa = 1;
 size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao, t_simulacao;
 size_t p_combustivel_min, p_combustivel_max;
-fila_ordenada_t * fila_avioes;
-fila_ordenada_t * fila_das_threads;
+fila_ordenada_t * fila_avioes, *fila_todos_avioes;
 aeroporto_t* meu_aeroporto;
 
 //Thread que controla o tempo de execucao do programa
@@ -74,8 +73,8 @@ void * rotina_aviao(void *arg) {
 //Thread que cria os avioes
 void * fabrica_aviao(void *arg) {
 	int ini_id = 0;
+	fila_todos_avioes = criar_fila(1);
 	srand(time(NULL));
-	fila_das_threads = criar_fila(1);
 	while(rodar_programa == 1) {
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
@@ -83,7 +82,7 @@ void * fabrica_aviao(void *arg) {
 		printf("->Tamanho antes de inserir:%ld \n", fila_avioes->n_elementos);
 		fflush(stdout);
 		inserir(fila_avioes, aviao);
-		inserir(fila_das_threads, aviao);
+		inserir(fila_todos_avioes, aviao);
 		printf("->Tamanho depois de inserir:%ld \n", fila_avioes->n_elementos);
 		fflush(stdout);
 		ini_id++;
@@ -183,7 +182,20 @@ int main (int argc, char** argv) {
 	pthread_join(fabrica, NULL);
 	printf("Fabrica conseguiu dar join\n");
 	fflush(stdout);
-	desaloca_fila(fila_das_threads);
+	printf("Numero de avioes: %ld\n", fila_todos_avioes->n_elementos);
+	fflush(stdout);
+	while (fila_todos_avioes->n_elementos > 0) {
+		printf("Removendo aviao\n");
+		fflush(stdout);
+		aviao_t * aviao = remover(fila_todos_avioes);
+		printf("Removeu aviao\n");
+		fflush(stdout);
+		pthread_join(aviao->thread, NULL);
+		printf("Aviao %ld thread deu join\n", aviao->id);
+		fflush(stdout);
+		desaloca_aviao(aviao);
+	}
+	desaloca_fila(fila_todos_avioes);
 	desaloca_fila(fila_avioes);
 	printf("Terminou de desalocar a fila\n");
 	fflush(stdout);
