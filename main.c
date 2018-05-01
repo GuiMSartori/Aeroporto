@@ -74,7 +74,6 @@ void * fabrica_aviao(void *arg) {
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
 		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
-		printf("terminou parte 5.2 combustivel:%d \n", ini_combustivel);
 		printf("Tamanho antes de inserir %ld: \n", fila_avioes->n_elementos);
 		inserir(fila_avioes, aviao);
 		printf("Tamanho antes de depois %ld: \n", fila_avioes->n_elementos);
