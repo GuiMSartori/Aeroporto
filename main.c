@@ -39,12 +39,9 @@ void * cronometro(void *arg) {
 
 //Thread que controla a rotina do aviao
 void * rotina_aviao(void *arg) {
-<<<<<<< HEAD
 	int id_aviao = *((int *) arg);
 	if(rodar_programa == 1) {
-=======
 	while(rodar_programa == 1) {
->>>>>>> master
 		//int id_aviao = *((int *) arg);
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
