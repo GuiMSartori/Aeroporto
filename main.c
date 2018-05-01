@@ -174,7 +174,13 @@ int main (int argc, char** argv) {
 	//aviao_t * aviao = aloca_aviao(10, 2); Remover tese rotina aviao
 	//pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);Remover tese rotina aviao
 	while(rodar_programa == 1);
+	printf("Tempo acabou\n");
+	fflush(stdout);
 	desaloca_fila(fila_avioes);
+	printf("Terminou de desalocar a fila\n");
+	fflush(stdout);
 	finalizar_aeroporto(meu_aeroporto);
+	printf("Terminou de finalizar o aeroporto\n");
+	fflush(stdout);
 	return 1;
 }
