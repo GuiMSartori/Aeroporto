@@ -26,8 +26,8 @@ int rodar_programa = 1;
 size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao, t_simulacao;
 size_t p_combustivel_min, p_combustivel_max;
 fila_ordenada_t * fila_avioes;
+fila_ordenada_t * fila_das_threads;
 aeroporto_t* meu_aeroporto;
-
 
 //Thread que controla o tempo de execucao do programa
 void * cronometro(void *arg) {
@@ -42,12 +42,13 @@ void * rotina_aviao(void *arg) {
 	if(rodar_programa == 1) {
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
-		//2.Pouso.
-		if(rodar_programa == 0) {
-			pthread_exit(NULL);
-			return;
+		//2.Pouso.	
+		while(id_aviao != fila_avioes->primeiro->dado->id) {
+			if(rodar_programa == 0) {
+				pthread_exit(NULL);
+				return NULL;
+			}
 		}
-		while(id_aviao != fila_avioes->primeiro->dado->id){}
 		printf("-->Tamanho antes de remover:%ld\n", fila_avioes->n_elementos);
 		fflush(stdout);
 		aviao_t * aviao = remover(fila_avioes);
@@ -75,6 +76,7 @@ void * rotina_aviao(void *arg) {
 void * fabrica_aviao(void *arg) {
 	int ini_id = 0;
 	srand(time(NULL));
+	fila_das_threads = criar_fila(1);
 	while(rodar_programa == 1) {
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
@@ -82,12 +84,14 @@ void * fabrica_aviao(void *arg) {
 		printf("->Tamanho antes de inserir:%ld \n", fila_avioes->n_elementos);
 		fflush(stdout);
 		inserir(fila_avioes, aviao);
+		inserir(fila_das_threads, aviao);
 		printf("->Tamanho depois de inserir:%ld \n", fila_avioes->n_elementos);
 		fflush(stdout);
 		ini_id++;
 		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	}
+	
 	pthread_exit(NULL);
 }
 
@@ -177,6 +181,16 @@ int main (int argc, char** argv) {
 	while(rodar_programa == 1){}
 	printf("Tempo acabou\n");
 	fflush(stdout);
+	pthread_join(tempo, NULL);
+	pthread_join(fabrica, NULL);
+	printf("Fabrica conseguiu dar join\n");
+	fflush(stdout);
+	while(fila_das_threads->n_elementos != 0) {
+		printf("Retirar elemento\n");
+		pthread_join((remover(fila_das_threads)->thread), NULL);
+		printf("Retirou\n");
+	}
+	desaloca_fila(fila_das_threads);
 	desaloca_fila(fila_avioes);
 	printf("Terminou de desalocar a fila\n");
 	fflush(stdout);
