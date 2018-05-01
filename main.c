@@ -91,7 +91,6 @@ void * fabrica_aviao(void *arg) {
 		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	}
-	
 	pthread_exit(NULL);
 }
 
@@ -187,7 +186,9 @@ int main (int argc, char** argv) {
 	fflush(stdout);
 	while(fila_das_threads->n_elementos != 0) {
 		printf("Retirar elemento\n");
-		pthread_join((remover(fila_das_threads)->thread), NULL);
+		aviao_t * elemento_removido = remover(fila_das_threads);
+		printf("Aviao Removido id:%ld\n", elemento_removido->id);
+		pthread_join(elemento_removido->thread, NULL);
 		printf("Retirou\n");
 	}
 	desaloca_fila(fila_das_threads);
