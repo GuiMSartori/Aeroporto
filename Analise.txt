@@ -3,3 +3,12 @@ como exemplificado no exercicio resolvido do mutex.
 
 codigo para numero aleatorio em intervalo
 rand() % (max_number + 1 - min_number) + min_number;
+
+
+Por motivos de realismo, os avioes ao acessarem uma esteira de malas
+decrementam o semaforo correspondente e criam uma thread para simular
+o tempo de espera para liberar a esteira. Podendo assim o aviao continuar
+fazendo a sua rotina enquanto outra thread cuida do tempo de liberaçao das esteiras.
+
+Outra soluçao seria fazer com que o aviao em si espere o tempo para liberar a esteira
+para poder continuar sua execuçao.

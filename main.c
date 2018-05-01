@@ -46,13 +46,13 @@ void * rotina_aviao(void *arg) {
 	pousar_aviao(&meu_aeroporto, &aviao);
 	//3.Acoplagem a um portão.
 	acoplar_portao(&meu_aeroporto, &aviao);
-	//4.1Transporte de bagagens.
-	transportar_bagagens(&meu_aeroporto, &aviao);
-	//4.2Embarque
+	//4.1Desembarque/Retirada das bagagens
 	adicionar_bagagens_esteira(&meu_aeroporto, &aviao);
+	//4.2Embarque/Transporte de bagagens.
+	transportar_bagagens(&meu_aeroporto, &aviao);
 	//5.Decolagem.
 	decolar_aviao(&meu_aeroporto, &aviao);
-
+	desaloca_aviao(&aviao);
 	pthread_exit(NULL);
 }
 
@@ -158,7 +158,7 @@ int main (int argc, char** argv) {
 	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
 	while(rodar_programa == 1);
 
-	desaloca_fila(fila_avioes);//placeholder, tem que rodar loop duraçao tamanho da fila
+	desaloca_fila(fila_avioes);
 	finalizar_aeroporto(meu_aeroporto);
 	return 1;
 }
