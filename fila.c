@@ -34,6 +34,7 @@ void desaloca_fila (fila_ordenada_t * fila) {
   ref = fila->primeiro;
   for(int i = 0; i < fila->n_elementos; i++) {
     next = ref->proximo;
+    pthread_join(ref->dado->thread, NULL);
     desaloca_elemento(ref);
     ref = next;
   }

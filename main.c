@@ -42,7 +42,7 @@ void * rotina_aviao(void *arg) {
 	if(rodar_programa == 1) {
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
-		//2.Pouso.	
+		//2.Pouso.
 		while(id_aviao != fila_avioes->primeiro->dado->id) {
 			if(rodar_programa == 0) {
 				pthread_exit(NULL);
@@ -67,7 +67,6 @@ void * rotina_aviao(void *arg) {
 
 		//5.Decolagem.
 		decolar_aviao(meu_aeroporto, aviao);
-		desaloca_aviao(aviao);
 	}
 	pthread_exit(NULL);
 }
@@ -184,13 +183,6 @@ int main (int argc, char** argv) {
 	pthread_join(fabrica, NULL);
 	printf("Fabrica conseguiu dar join\n");
 	fflush(stdout);
-	while(fila_das_threads->n_elementos != 0) {
-		printf("Retirar elemento\n");
-		aviao_t * elemento_removido = remover(fila_das_threads);
-		printf("Aviao Removido id:%ld\n", elemento_removido->id);
-		pthread_join(elemento_removido->thread, NULL);
-		printf("Retirou\n");
-	}
 	desaloca_fila(fila_das_threads);
 	desaloca_fila(fila_avioes);
 	printf("Terminou de desalocar a fila\n");
@@ -198,5 +190,5 @@ int main (int argc, char** argv) {
 	finalizar_aeroporto(meu_aeroporto);
 	printf("Terminou de finalizar o aeroporto\n");
 	fflush(stdout);
-	return 1;
+	return 0;
 }
