@@ -43,8 +43,11 @@ void * rotina_aviao(void *arg) {
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
 		//2.Pouso.
-		//while(id_aviao != fila_avioes->primeiro->dado->id){}
-
+		if(rodar_programa == 0) {
+			pthread_exit(NULL);
+			return;
+		}
+		while(id_aviao != fila_avioes->primeiro->dado->id){}
 		printf("-->Tamanho antes de remover:%ld\n", fila_avioes->n_elementos);
 		fflush(stdout);
 		aviao_t * aviao = remover(fila_avioes);
