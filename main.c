@@ -73,7 +73,6 @@ void * rotina_aviao(void *arg) {
 //Thread que cria os avioes
 void * fabrica_aviao(void *arg) {
 	int ini_id = 0;
-	fila_todos_avioes = criar_fila(1);
 	srand(time(NULL));
 	while(rodar_programa == 1) {
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
@@ -83,6 +82,7 @@ void * fabrica_aviao(void *arg) {
 		fflush(stdout);
 		inserir(fila_avioes, aviao);
 		inserir(fila_todos_avioes, aviao);
+		printf("Inserido na fila de avioes. Tamanho da fila: %ld\n", fila_todos_avioes->n_elementos);
 		printf("->Tamanho depois de inserir:%ld \n", fila_avioes->n_elementos);
 		fflush(stdout);
 		ini_id++;
@@ -171,6 +171,7 @@ int main (int argc, char** argv) {
 	// Descreve aqui sua simulação usando as funções definidas no arquivo "aeroporto.h"
 	// Lembre-se de implementá-las num novo arquivo "aeroporto.c"
 	fila_avioes = criar_fila(p_combustivel_max);
+	fila_todos_avioes = criar_fila(p_combustivel_max);
 	t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	pthread_t tempo, fabrica;
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
