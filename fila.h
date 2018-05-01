@@ -45,7 +45,4 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado);
 // Remove o último da fila.
 aviao_t * remover (fila_ordenada_t * fila);
 
-//Retorna id do primeiro aviao da fila.
-int id_primeiro (fila_ordenada_t * fila);
-
 #endif

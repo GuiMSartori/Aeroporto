@@ -28,13 +28,13 @@ aeroporto_t* iniciar_aeroporto (size_t* args, size_t n_args) {
 	return aeroporto;
 }
 
-void aproximacao_aeroporto (aeroporto_t* aeroporto, aviao_t* aviao) {
-	printf("Aviao id:%d se aproxima do aeroporto\n", aviao->id);
-	sem_wait(&aeroporto->sem_pistas);
+void aproximacao_aeroporto (aeroporto_t* aeroporto, int* id) {
+	printf("Aviao id:%d se aproxima do aeroporto\n", id);
 }
 
 void pousar_aviao (aeroporto_t* aeroporto, aviao_t* aviao) {
 	printf("Aviao id:%d pousou\n", aviao->id);
+	sem_wait(&aeroporto->sem_pistas);
 }
 
 void acoplar_portao (aeroporto_t* aeroporto, aviao_t* aviao) {

@@ -65,7 +65,3 @@ aviao_t * remover (fila_ordenada_t * fila) {
   desaloca_elemento(fila->primeiro->proximo);
   return retorno;
 }
-
-int id_primeiro (fila_ordenada_t * fila) {
-  return fila->primeiro->dado->id;
-}

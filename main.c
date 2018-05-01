@@ -25,29 +25,49 @@ int rodar_programa = 1;
 size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao;
 size_t p_combustivel_min, p_combustivel_max;
 fila_ordenada_t * fila_avioes;
+aeroporto_t* meu_aeroporto;
 
+//Thread que controla o tempo de execucao do programa
 void * cronometro(void *arg) {
 	usleep(*((int *) arg));
 	rodar_programa = 0;
 	pthread_exit(NULL);
 }
 
+//Thread que controla a rotina do aviao
 void * rotina_aviao(void *arg) {
+	//int id_aviao = *((int *) arg);
+	int id_aviao = *((int *) arg);
+	//1.Aproximação ao aeroporto
+	aproximacao_aeroporto(&meu_aeroporto, &id_aviao);
+	//2.Pouso.
+	while(id_aviao != fila_avioes->primeiro->dado->id);
+	aviao_t * aviao = remover(&fila_avioes);
+	pousar_aviao(&meu_aeroporto, &aviao);
+	//3.Acoplagem a um portão.
+	acoplar_portao(&meu_aeroporto, &aviao);
+	//4.1Transporte de bagagens.
+	transportar_bagagens(&meu_aeroporto, &aviao);
+	//4.2Embarque
+	adicionar_bagagens_esteira(&meu_aeroporto, &aviao);
+	//5.Decolagem.
+	decolar_aviao(&meu_aeroporto, &aviao);
 
+	pthread_exit(NULL);
 }
 
+//Thread que cria os avioes
 void * fabrica_aviao(void *arg) {
 	int ini_id = 0;
 	while(rodar_programa == 1) {
-		usleep(t_novo_aviao);
+		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
 		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
 		inserir(&fila_avioes, aviao);
 		ini_id++;
+		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	}
-
-
 	pthread_exit(NULL);
 }
 
@@ -127,7 +147,7 @@ int main (int argc, char** argv) {
 				t_pouso_decolagem, t_remover_bagagens,
 				t_inserir_bagagens, t_bagagens_esteira};
 
-	aeroporto_t* meu_aeroporto = iniciar_aeroporto(args, n_args);
+	meu_aeroporto = iniciar_aeroporto(args, n_args);
 
 	// Descreve aqui sua simulação usando as funções definidas no arquivo "aeroporto.h"
 	// Lembre-se de implementá-las num novo arquivo "aeroporto.c"
@@ -137,8 +157,8 @@ int main (int argc, char** argv) {
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
 	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
 	while(rodar_programa == 1);
-	
-	desaloca_fila(fila_avioes);
+
+	desaloca_fila(fila_avioes);//placeholder, tem que rodar loop duraçao tamanho da fila
 	finalizar_aeroporto(meu_aeroporto);
 	return 1;
 }

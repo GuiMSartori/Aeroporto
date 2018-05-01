@@ -25,9 +25,9 @@ threads na sua solução. Basicamente, eles devem realizar a seguinte rotina:
     2.Pouso. Quando uma pista estiver desocupada, o avião deverá então pousar.
     3.Acoplagem a um portão. Após o pouso, o avião deverá se dirigir a um portão de
     embarque/desembarque.
-    4.Transporte de bagagens. Ao chegar no portão, as bagagens serão removidas do 
+    4.1Transporte de bagagens. Ao chegar no portão, as bagagens serão removidas do 
     avião e colocadas em uma das esteiras de malas disponíveis no aeroporto. 
-    Então, novos passageiros embarcarão no avião e suas bagagens serão transferidas
+    4.2Então, novos passageiros embarcarão no avião e suas bagagens serão transferidas
     para o avião. O avião deverá liberar o portão de desembarque/embarque quando as
     malas dos passageiros que estão embarcando tiverem sido colocadas no avião.
     Para simplificar o problema, considere que todos os passageiros já terão embarcado
