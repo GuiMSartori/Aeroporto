@@ -73,7 +73,6 @@ aviao_t * remover (fila_ordenada_t * fila) {
     desaloca_elemento(fila->primeiro);
     return retorno;
   }
-  aviao_t * retorno = fila->primeiro->dado;
   fila->primeiro = fila->primeiro->anterior;
   desaloca_elemento(fila->primeiro->proximo);
   fila->n_elementos--;
