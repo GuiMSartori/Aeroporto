@@ -37,26 +37,24 @@ void desaloca_fila (fila_ordenada_t * fila) {
     desaloca_elemento(ref);
     ref = next;
   }
-  free (fila);
+  free(fila);
 }
 
 void inserir (fila_ordenada_t * fila, aviao_t * dado) {
   elemento_t * novo = aloca_elemento(dado);
+  if(fila->n_elementos == 0) {
+    fila->primeiro = novo;
+    fila->ultimo = novo;
+    fila->n_elementos++;
+    return;
+  }
   if (((float) (dado->combustivel/fila->combustivel_max)) > 0.1) {
-    if (fila->n_elementos > 0) {
-      fila->ultimo->anterior = novo;
-      novo->proximo = fila->ultimo;
-    } else {
-      fila->primeiro = novo;
-    }
+    fila->ultimo->anterior = novo;
+    novo->proximo = fila->ultimo;
     fila->ultimo = novo;
   } else {
-    if (fila->n_elementos > 0) {
-      fila->primeiro->proximo = novo;
-      novo->anterior = fila->primeiro;
-    } else {
-      fila->ultimo = novo;
-    }
+    fila->primeiro->proximo = novo;
+    novo->anterior = fila->primeiro;
     fila->primeiro = novo;
   }
   fila->n_elementos++;
@@ -71,7 +69,6 @@ aviao_t * remover (fila_ordenada_t * fila) {
   aviao_t * retorno = fila->primeiro->dado;
   if(fila->n_elementos == 1) {
     desaloca_elemento(fila->primeiro);
-    desaloca_elemento(fila->ultimo);
     return retorno;
   }
   fila->primeiro = fila->primeiro->anterior;
