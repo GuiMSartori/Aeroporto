@@ -40,13 +40,14 @@ void * cronometro(void *arg) {
 void * rotina_aviao(void *arg) {
 	int id_aviao = *((int *) arg);
 	if(rodar_programa == 1) {
-		//int id_aviao = *((int *) arg);
 		//1.Aproximação ao aeroporto
 		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
-
 		//2.Pouso.
-		while(id_aviao != fila_avioes->primeiro->dado->id);
+		//while(id_aviao != fila_avioes->primeiro->dado->id){}
+
+		printf("Tamanho antes de remover %ld: \n", fila_avioes->n_elementos);
 		aviao_t * aviao = remover(fila_avioes);
+		printf("Tamanho depois de remover %ld: \n", fila_avioes->n_elementos);
 		pousar_aviao(meu_aeroporto, aviao);
 
 		//3.Acoplagem a um portão.
@@ -74,7 +75,9 @@ void * fabrica_aviao(void *arg) {
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
 		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
 		printf("terminou parte 5.2 combustivel:%d \n", ini_combustivel);
+		printf("Tamanho antes de inserir %ld: \n", fila_avioes->n_elementos);
 		inserir(fila_avioes, aviao);
+		printf("Tamanho antes de depois %ld: \n", fila_avioes->n_elementos);
 		ini_id++;
 		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
