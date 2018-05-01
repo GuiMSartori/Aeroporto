@@ -2,7 +2,6 @@
 #define FILA_AVIAO_H
 
 #include "aviao.h"
-#include "aviao.c"
 
 /**
  * Esta estrutura auxiliar deve facilitar a implementação da fila ordenada.

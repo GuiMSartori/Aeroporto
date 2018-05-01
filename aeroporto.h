@@ -2,7 +2,6 @@
 #define AEROPORTO_H
 
 #include "aviao.h"
-#include "aviao.c"
 #include "semaphore.h"
 
 typedef size_t tempo_t;
@@ -36,7 +35,7 @@ aeroporto_t* iniciar_aeroporto (size_t* args, size_t n_args);
  * do aeroporto. Nesta situação um avião deve pousar em seguida,
  * mas somente se houver uma pista livre para ele.
  **/
-void aproximacao_aeroporto (aeroporto_t* aeroporto, aviao_t* aviao);
+void aproximacao_aeroporto (aeroporto_t* aeroporto, int* id);
 
 /**
  * Esta função deve fazer com que o aviao pouse, utilizando uma pista livre.

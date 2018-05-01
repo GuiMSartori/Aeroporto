@@ -1,6 +1,5 @@
 #include "fila.h"
 #include "aviao.h"
-#include "aviao.c"
 
 /**
  * fila.c
@@ -17,7 +16,7 @@
  }
 
 void desaloca_elemento (elemento_t * elemento) {
-    desaloca_aviao(&elemento->dado);
+    desaloca_aviao(elemento->dado);
     free(elemento);
 }
 

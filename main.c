@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "aeroporto.h"
 #include "aeroporto.c"
@@ -39,20 +40,20 @@ void * rotina_aviao(void *arg) {
 	//int id_aviao = *((int *) arg);
 	int id_aviao = *((int *) arg);
 	//1.Aproximação ao aeroporto
-	aproximacao_aeroporto(&meu_aeroporto, &id_aviao);
+	aproximacao_aeroporto(meu_aeroporto, &id_aviao);
 	//2.Pouso.
 	while(id_aviao != fila_avioes->primeiro->dado->id);
-	aviao_t * aviao = remover(&fila_avioes);
-	pousar_aviao(&meu_aeroporto, &aviao);
+	aviao_t * aviao = remover(fila_avioes);
+	pousar_aviao(meu_aeroporto, aviao);
 	//3.Acoplagem a um portão.
-	acoplar_portao(&meu_aeroporto, &aviao);
+	acoplar_portao(meu_aeroporto, aviao);
 	//4.1Desembarque/Retirada das bagagens
-	adicionar_bagagens_esteira(&meu_aeroporto, &aviao);
+	adicionar_bagagens_esteira(meu_aeroporto, aviao);
 	//4.2Embarque/Transporte de bagagens.
-	transportar_bagagens(&meu_aeroporto, &aviao);
+	transportar_bagagens(meu_aeroporto, aviao);
 	//5.Decolagem.
-	decolar_aviao(&meu_aeroporto, &aviao);
-	desaloca_aviao(&aviao);
+	decolar_aviao(meu_aeroporto, aviao);
+	desaloca_aviao(aviao);
 	pthread_exit(NULL);
 }
 
@@ -63,7 +64,7 @@ void * fabrica_aviao(void *arg) {
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
 		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
-		inserir(&fila_avioes, aviao);
+		inserir(fila_avioes, aviao);
 		ini_id++;
 		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
