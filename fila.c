@@ -71,6 +71,7 @@ aviao_t * remover (fila_ordenada_t * fila) {
   aviao_t * retorno = fila->primeiro->dado;
   if(fila->n_elementos == 1) {
     desaloca_elemento(fila->primeiro);
+    desaloca_elemento(fila->ultimo);
     return retorno;
   }
   fila->primeiro = fila->primeiro->anterior;
