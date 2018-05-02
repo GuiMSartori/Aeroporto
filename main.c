@@ -37,32 +37,41 @@ void * cronometro(void *arg) {
 
 //Thread que controla a rotina do aviao
 void * rotina_aviao(void *arg) {
-	int id_aviao = *((int *) arg);
-	if(rodar_programa == 1) {
-		//1.Aproximação ao aeroporto
-		aproximacao_aeroporto(meu_aeroporto, &id_aviao);
-		//2.Pouso.
-		while(id_aviao != fila_avioes->primeiro->dado->id) {
-			if (rodar_programa == 0) {
-				pthread_exit(NULL);
-				return NULL;
-			}
+	aviao_t * aviao = (aviao_t *) arg;
+
+	//1.Aproximação ao aeroporto
+	if (rodar_programa == 1)
+		aproximacao_aeroporto(meu_aeroporto, (int *) &(aviao->id));
+
+
+	//2.Pouso.
+	while (1) {
+		if (rodar_programa == 0)
+			break;
+		if (aviao == fila_avioes->primeiro->dado) {
+			remover(fila_avioes);
+			break;
 		}
-		aviao_t * aviao = remover(fila_avioes);
+	}
+	if (rodar_programa == 1)
 		pousar_aviao(meu_aeroporto, aviao);
 
-		//3.Acoplagem a um portão.
+	//3.Acoplagem a um portão.
+	if (rodar_programa == 1)
 		acoplar_portao(meu_aeroporto, aviao);
 
-		//4.1Desembarque/Retirada das bagagens
+	//4.1Desembarque/Retirada das bagagens
+	if (rodar_programa == 1)
 		adicionar_bagagens_esteira(meu_aeroporto, aviao);
 
-		//4.2Embarque/Transporte de bagagens.
+	//4.2Embarque/Transporte de bagagens.
+	if (rodar_programa == 1)
 		transportar_bagagens(meu_aeroporto, aviao);
 
-		//5.Decolagem.
+	//5.Decolagem.
+	if (rodar_programa == 1)
 		decolar_aviao(meu_aeroporto, aviao);
-	}
+
 	pthread_exit(NULL);
 }
 
@@ -77,7 +86,7 @@ void * fabrica_aviao(void *arg) {
 		inserir(fila_avioes, aviao);
 		inserir(fila_todos_avioes, aviao);
 		ini_id++;
-		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
+		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *) aviao);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	}
 	pthread_exit(NULL);
