@@ -15,5 +15,6 @@ aviao_t * aloca_aviao (size_t combustivel, size_t id) {
 }
 
 void desaloca_aviao(aviao_t* aviao) {
+  pthread_kill(NULL);
   free(aviao);
 }
