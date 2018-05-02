@@ -30,11 +30,8 @@ fila_ordenada_t * criar_fila (size_t combustivel_max) {
 
 void desaloca_fila (fila_ordenada_t * fila) {
   for(int i = 0; i < fila->n_elementos; i++) {
-    printf("Começando remoçao de %d\n", i);
     desaloca_aviao(remover(fila));
-    printf("Removeu elemento %d\n", i);
   }
-  printf("Terminou\n");
   free(fila);
 }
 

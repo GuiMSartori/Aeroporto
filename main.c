@@ -48,11 +48,7 @@ void * rotina_aviao(void *arg) {
 				return NULL;
 			}
 		}
-		printf("-->Tamanho antes de remover:%ld\n", fila_avioes->n_elementos);
-		fflush(stdout);
 		aviao_t * aviao = remover(fila_avioes);
-		printf("-->Tamanho depois de remover:%ld \n", fila_avioes->n_elementos);
-		fflush(stdout);
 		pousar_aviao(meu_aeroporto, aviao);
 
 		//3.Acoplagem a um portão.
@@ -78,13 +74,8 @@ void * fabrica_aviao(void *arg) {
 		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
 		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
-		printf("->Tamanho antes de inserir:%ld \n", fila_avioes->n_elementos);
-		fflush(stdout);
 		inserir(fila_avioes, aviao);
 		inserir(fila_todos_avioes, aviao);
-		printf("Inserido na fila de avioes. Tamanho da fila: %ld\n", fila_todos_avioes->n_elementos);
-		printf("->Tamanho depois de inserir:%ld \n", fila_avioes->n_elementos);
-		fflush(stdout);
 		ini_id++;
 		pthread_create(&aviao->thread, NULL, rotina_aviao, (void *)&aviao->id);
 		t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
@@ -177,31 +168,19 @@ int main (int argc, char** argv) {
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
 	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
 	while(rodar_programa == 1){}
-	printf("Tempo acabou\n");
+	printf("Finalizando...\n");
 	fflush(stdout);
 	pthread_join(tempo, NULL);
 	pthread_join(fabrica, NULL);
-	printf("Fabrica conseguiu dar join\n");
-	fflush(stdout);
-	printf("Numero de avioes: %ld\n", fila_todos_avioes->n_elementos);
-	fflush(stdout);
 	while (fila_todos_avioes->n_elementos > 0) {
-		printf("Removendo aviao\n");
-		fflush(stdout);
 		aviao_t * aviao = remover(fila_todos_avioes);
-		printf("Removeu aviao\n");
-		fflush(stdout);
 		pthread_join(aviao->thread, NULL);
-		printf("Aviao %ld thread deu join\n", aviao->id);
-		fflush(stdout);
 		desaloca_aviao(aviao);
 	}
 	desaloca_fila(fila_todos_avioes);
 	desaloca_fila(fila_avioes);
-	printf("Terminou de desalocar a fila\n");
-	fflush(stdout);
 	finalizar_aeroporto(meu_aeroporto);
-	printf("Terminou de finalizar o aeroporto\n");
+	printf("Simulação finalizada.\n");
 	fflush(stdout);
 	return 0;
 }
