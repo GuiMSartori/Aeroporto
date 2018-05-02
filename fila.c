@@ -26,7 +26,7 @@ fila_ordenada_t * criar_fila (size_t combustivel_max) {
     fila_ordenada->ultimo = NULL;
     fila_ordenada->n_elementos = 0;
     fila_ordenada->combustivel_max = combustivel_max;
-    pthread_mutex_init(&fila_ordenada->mutex);
+    pthread_mutex_init(&fila_ordenada->mutex, NULL);
     return fila_ordenada;
 }
 
@@ -34,6 +34,7 @@ void desaloca_fila (fila_ordenada_t * fila) {
   for(int i = 0; i < fila->n_elementos; i++) {
     desaloca_aviao(remover(fila));
   }
+  pthread_mutex_destroy(&fila->mutex);
   free(fila);
 }
 
@@ -44,6 +45,7 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado) {
     fila->primeiro = novo;
     fila->ultimo = novo;
     fila->n_elementos++;
+    pthread_mutex_unlock(&fila->mutex);
     return;
   }
   if (((float) (dado->combustivel/fila->combustivel_max)) > 0.1) {
@@ -62,12 +64,14 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado) {
 aviao_t * remover (fila_ordenada_t * fila) {
   pthread_mutex_lock(&fila->mutex);
   if (fila->n_elementos == 0){
+    pthread_mutex_unlock(&fila->mutex);
     return NULL;
   }
   aviao_t * retorno = fila->primeiro->dado;
   if (fila->n_elementos == 1) {
     desaloca_elemento(fila->primeiro);
     fila->n_elementos--;
+    pthread_mutex_unlock(&fila->mutex);
     return retorno;
   }
   fila->primeiro = fila->primeiro->anterior;

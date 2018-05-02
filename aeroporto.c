@@ -53,7 +53,6 @@ void adicionar_bagagens_esteira (aeroporto_t* aeroporto, aviao_t* aviao) {
 	for(int i = 0; i < aeroporto->n_esteiras; i++) {
 			if(sem_trywait(&aeroporto->sem_esteiras[i]) == 0) {
 				esteira_ocupada = i;
-				ocupar_esteira = 1;
 				break;
 			}
 			if (i == aeroporto->n_esteiras - 1) {

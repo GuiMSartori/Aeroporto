@@ -20,7 +20,7 @@
 #define TEMPO_REMOVER_BAGAGENS 90
 #define TEMPO_INSERIR_BAGAGENS 110
 #define TEMPO_BAGAGENS_ESTEIRA 200
-#define TEMPO_SIMULACAO 10000
+#define TEMPO_SIMULACAO 10000 //10000
 
 int rodar_programa = 1;
 size_t t_novo_aviao_min, t_novo_aviao_max, t_novo_aviao, t_simulacao;
