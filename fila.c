@@ -1,5 +1,6 @@
 #include "fila.h"
 #include "aviao.h"
+#include <pthread.h>
 
 /**
  * fila.c
@@ -25,6 +26,7 @@ fila_ordenada_t * criar_fila (size_t combustivel_max) {
     fila_ordenada->ultimo = NULL;
     fila_ordenada->n_elementos = 0;
     fila_ordenada->combustivel_max = combustivel_max;
+    pthread_mutex_init(&fila_ordenada->mutex);
     return fila_ordenada;
 }
 
@@ -37,6 +39,7 @@ void desaloca_fila (fila_ordenada_t * fila) {
 
 void inserir (fila_ordenada_t * fila, aviao_t * dado) {
   elemento_t * novo = aloca_elemento(dado);
+  pthread_mutex_lock(&fila->mutex);
   if (fila->n_elementos == 0) {
     fila->primeiro = novo;
     fila->ultimo = novo;
@@ -53,9 +56,11 @@ void inserir (fila_ordenada_t * fila, aviao_t * dado) {
     fila->primeiro = novo;
   }
   fila->n_elementos++;
+  pthread_mutex_unlock(&fila->mutex);
 }
 
 aviao_t * remover (fila_ordenada_t * fila) {
+  pthread_mutex_lock(&fila->mutex);
   if (fila->n_elementos == 0){
     return NULL;
   }
@@ -68,5 +73,6 @@ aviao_t * remover (fila_ordenada_t * fila) {
   fila->primeiro = fila->primeiro->anterior;
   desaloca_elemento(fila->primeiro->proximo);
   fila->n_elementos--;
+  pthread_mutex_unlock(&fila->mutex);
   return retorno;
 }
