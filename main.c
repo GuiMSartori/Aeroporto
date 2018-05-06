@@ -30,7 +30,7 @@ aeroporto_t* meu_aeroporto;
 
 //Thread que controla o tempo de execucao do programa
 void * cronometro(void *arg) {
-	usleep(t_simulacao);
+	usleep(t_simulacao * 1000);
 	rodar_programa = 0;
 	pthread_exit(NULL);
 }
@@ -80,7 +80,7 @@ void * fabrica_aviao(void *arg) {
 	int ini_id = 0;
 	srand(time(NULL));
 	while(rodar_programa == 1) {
-		usleep(t_novo_aviao);  //Tempo de criacao de um novo aviao
+		usleep(t_novo_aviao * 1000);  //Tempo de criacao de um novo aviao
 		int ini_combustivel = rand() % (p_combustivel_max + 1 - p_combustivel_min) + p_combustivel_min;
 		aviao_t * aviao = aloca_aviao(ini_combustivel, ini_id);
 		inserir(fila_avioes, aviao);
@@ -177,9 +177,10 @@ int main (int argc, char** argv) {
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
 	pthread_create(&fabrica, NULL, fabrica_aviao, NULL);
 	while(rodar_programa == 1){}
-	printf("Finalizando...\n");
+	printf("------------------------>>>Finalizando...<<<------------------------\n");
 	fflush(stdout);
 	pthread_join(tempo, NULL);
+	usleep(t_novo_aviao * 1000);
 	pthread_join(fabrica, NULL);
 	while (fila_todos_avioes->n_elementos > 0) {
 		aviao_t * aviao = remover(fila_todos_avioes);

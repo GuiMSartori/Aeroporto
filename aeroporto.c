@@ -36,7 +36,7 @@ void pousar_aviao (aeroporto_t* aeroporto, aviao_t* aviao) {
 	sem_wait(&aeroporto->sem_pistas);
 	printf("Aviao id:%zu esta pousando\n", aviao->id);
 	fflush(stdout);
-	usleep(aeroporto->t_pouso_decolagem);
+	usleep(aeroporto->t_pouso_decolagem * 1000);
 	printf("Aviao id:%zu pousou\n", aviao->id);
 	fflush(stdout);
 	sem_post(&aeroporto->sem_pistas);
@@ -62,7 +62,7 @@ void adicionar_bagagens_esteira (aeroporto_t* aeroporto, aviao_t* aviao) {
 
 	printf("Aviao id:%zu esta transferindo as bagagens a esteira\n", aviao->id);
 	fflush(stdout);
-	usleep(aeroporto->t_remover_bagagens);
+	usleep(aeroporto->t_remover_bagagens * 1000);
 	printf("Aviao id:%zu terminou de transferir as bagagens a esteira\n", aviao->id);
 	fflush(stdout);
 	sem_post(&aeroporto->sem_esteiras[esteira_ocupada]);
@@ -71,7 +71,7 @@ void adicionar_bagagens_esteira (aeroporto_t* aeroporto, aviao_t* aviao) {
 void transportar_bagagens (aeroporto_t* aeroporto, aviao_t* aviao) {
 	printf("Aviao id:%zu esta transportando as bagagens\n", aviao->id);
 	fflush(stdout);
-	usleep(aeroporto->t_inserir_bagagens);
+	usleep(aeroporto->t_inserir_bagagens * 1000);
 	printf("Aviao id:%zu terminou de transportar as bagagens\n", aviao->id);
 	fflush(stdout);
 	sem_post(&aeroporto->sem_portoes);
@@ -81,7 +81,7 @@ void decolar_aviao (aeroporto_t* aeroporto, aviao_t* aviao) {
 	sem_wait(&aeroporto->sem_pistas);
 	printf("Aviao id:%zu está decolando\n", aviao->id);
 	fflush(stdout);
-	usleep(aeroporto->t_pouso_decolagem);
+	usleep(aeroporto->t_pouso_decolagem * 1000);
 	printf("Aviao id:%zu decolou\n", aviao->id);
 	fflush(stdout);
 	sem_post(&aeroporto->sem_pistas);
