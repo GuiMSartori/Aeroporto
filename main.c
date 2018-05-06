@@ -40,37 +40,29 @@ void * rotina_aviao(void *arg) {
 	aviao_t * aviao = (aviao_t *) arg;
 
 	//1.Aproximação ao aeroporto
-	if (rodar_programa == 1)
-		aproximacao_aeroporto(meu_aeroporto, (int *) &(aviao->id));
+	aproximacao_aeroporto(meu_aeroporto, (int *) &(aviao->id));
 
 
 	//2.Pouso.
 	while (1) {
-		if (rodar_programa == 0)
-			break;
 		if (aviao == fila_avioes->primeiro->dado) {
 			remover(fila_avioes);
 			break;
 		}
 	}
-	if (rodar_programa == 1)
-		pousar_aviao(meu_aeroporto, aviao);
+	pousar_aviao(meu_aeroporto, aviao);
 
 	//3.Acoplagem a um portão.
-	if (rodar_programa == 1)
-		acoplar_portao(meu_aeroporto, aviao);
+	acoplar_portao(meu_aeroporto, aviao);
 
 	//4.1Desembarque/Retirada das bagagens
-	if (rodar_programa == 1)
-		adicionar_bagagens_esteira(meu_aeroporto, aviao);
+	adicionar_bagagens_esteira(meu_aeroporto, aviao);
 
 	//4.2Embarque/Transporte de bagagens.
-	if (rodar_programa == 1)
-		transportar_bagagens(meu_aeroporto, aviao);
+	transportar_bagagens(meu_aeroporto, aviao);
 
 	//5.Decolagem.
-	if (rodar_programa == 1)
-		decolar_aviao(meu_aeroporto, aviao);
+	decolar_aviao(meu_aeroporto, aviao);
 
 	pthread_exit(NULL);
 }
@@ -171,7 +163,7 @@ int main (int argc, char** argv) {
 	// Descreve aqui sua simulação usando as funções definidas no arquivo "aeroporto.h"
 	// Lembre-se de implementá-las num novo arquivo "aeroporto.c"
 	fila_avioes = criar_fila(p_combustivel_max);
-	fila_todos_avioes = criar_fila(p_combustivel_max);
+	fila_todos_avioes = criar_fila((p_combustivel_min * 10) - 1);
 	t_novo_aviao = rand() % (t_novo_aviao_max + 1 - t_novo_aviao_min) + t_novo_aviao_min;
 	pthread_t tempo, fabrica;
 	pthread_create(&tempo, NULL, cronometro, (void *)&t_simulacao);
@@ -180,12 +172,12 @@ int main (int argc, char** argv) {
 	printf("------------------------>>>Finalizando...<<<------------------------\n");
 	fflush(stdout);
 	pthread_join(tempo, NULL);
-	usleep(t_novo_aviao * 1000);
 	pthread_join(fabrica, NULL);
-	while (fila_todos_avioes->n_elementos > 0) {
+	int repeticoes = fila_todos_avioes->n_elementos;
+	for  (int i = 0; i < repeticoes; i++) {
 		aviao_t * aviao = remover(fila_todos_avioes);
 		pthread_join(aviao->thread, NULL);
-		desaloca_aviao(aviao);
+		inserir(fila_todos_avioes, aviao);
 	}
 	desaloca_fila(fila_todos_avioes);
 	desaloca_fila(fila_avioes);
